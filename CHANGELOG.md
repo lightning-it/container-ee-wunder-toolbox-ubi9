@@ -1,3 +1,10 @@
+## [1.1.0](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.0.0...v1.1.0) (2026-02-17)
+
+### Features
+
+* add GitHub Actions workflow for container build validation; update Dockerfile and requirements for dependencies ([50b67dd](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/commit/50b67dde2ea7044fd9e7ae87ef12805249fc6eba))
+* initial-version part 2 ([02583e8](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/commit/02583e85b6d07b2b1e07a7efa1ff606314f3b59c))
+
 ## 1.0.0 (2026-02-17)
 
 ### Features
