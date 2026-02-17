@@ -1,0 +1,120 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "dependencyDashboard": true,
+  "timezone": "UTC",
+  "schedule": [],
+  "labels": [
+    "dependencies"
+  ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "matchManagers": [
+        "npm"
+      ],
+      "postUpgradeTasks": {
+        "commands": [
+          "npm install --package-lock-only --include=optional"
+        ],
+        "fileFilters": [
+          "package-lock.json"
+        ]
+      }
+    },
+    {
+      "matchManagers": [
+        "dockerfile"
+      ],
+      "groupName": "Base image and Terraform tooling"
+    },
+    {
+      "matchManagers": [
+        "pip_requirements"
+      ],
+      "groupName": "Python tools"
+    },
+    {
+      "matchManagers": [
+        "pip_requirements"
+      ],
+      "matchPackageNames": [
+        "ansible-core"
+      ],
+      "allowedVersions": ">=2.15.13 <2.16.0"
+    },
+    {
+      "matchManagers": [
+        "pip_requirements"
+      ],
+      "matchPackageNames": [
+        "ansible-lint"
+      ],
+      "allowedVersions": "<7.0.0"
+    },
+    {
+      "matchManagers": [
+        "pip_requirements"
+      ],
+      "matchPackageNames": [
+        "molecule",
+        "molecule-plugins"
+      ],
+      "allowedVersions": "<6.1.0",
+      "rangeStrategy": "pin"
+    },
+    {
+      "matchManagers": [
+        "pip_requirements"
+      ],
+      "matchPackageNames": [
+        "docker"
+      ],
+      "allowedVersions": ">=6.1.0 <7.0.0",
+      "rangeStrategy": "pin"
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Terraform version pins in Dockerfile",
+      "managerFilePatterns": [
+        "/Dockerfile/"
+      ],
+      "matchStrings": [
+        "TF_VERSION=(?<currentValue>[0-9.]+)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "hashicorp/terraform",
+      "versioningTemplate": "hashicorp"
+    },
+    {
+      "customType": "regex",
+      "description": "TFLint version pins in Dockerfile",
+      "managerFilePatterns": [
+        "/Dockerfile/"
+      ],
+      "matchStrings": [
+        "TFLINT_VERSION=(?<currentValue>[0-9.]+)"
+      ],
+      "datasourceTemplate": "github-tags",
+      "depNameTemplate": "terraform-linters/tflint"
+    },
+    {
+      "customType": "regex",
+      "description": "terraform-docs version pins in Dockerfile",
+      "managerFilePatterns": [
+        "/Dockerfile/"
+      ],
+      "matchStrings": [
+        "TF_DOCS_VERSION=(?<currentValue>[0-9.]+)"
+      ],
+      "datasourceTemplate": "github-tags",
+      "depNameTemplate": "terraform-docs/terraform-docs"
+    }
+  ]
+}

@@ -12,7 +12,7 @@ ARG KUSTOMIZE_VERSION=5.8.0
 COPY rpm-packages.txt /tmp/rpm-packages.txt
 COPY requirements.txt /tmp/requirements.txt
 
-RUN set -euo pipefail; \
+RUN set -eu; \
     xargs -r dnf -y install --allowerasing < /tmp/rpm-packages.txt; \
     python3 -m pip install --no-cache-dir -r /tmp/requirements.txt; \
     arch="$(uname -m)"; \
