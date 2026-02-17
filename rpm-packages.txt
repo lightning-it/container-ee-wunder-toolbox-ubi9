@@ -3,3 +3,4 @@ procps-ng
 iproute
 vim-enhanced
 which
+oniguruma

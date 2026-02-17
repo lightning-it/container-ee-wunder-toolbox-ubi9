@@ -14,38 +14,37 @@ COPY requirements.txt /tmp/requirements.txt
 
 RUN set -eu; \
     xargs -r dnf -y install --allowerasing < /tmp/rpm-packages.txt; \
-    python3 -m pip install --no-cache-dir -r /tmp/requirements.txt; \
+    dnf -y install --allowerasing gcc make python3-devel; \
+    curl -fsSL \
+      "https://raw.githubusercontent.com/kkos/oniguruma/v6.9.6/src/oniguruma.h" \
+      -o /usr/local/include/oniguruma.h; \
+    ln -sf /usr/lib64/libonig.so.5 /usr/lib64/libonig.so; \
+    PIP_NO_BINARY=onigurumacffi python3 -m pip install --no-cache-dir -r /tmp/requirements.txt; \
+    rm -f /usr/local/include/oniguruma.h /usr/lib64/libonig.so; \
+    dnf -y remove gcc make python3-devel; \
     arch="$(uname -m)"; \
     case "${arch}" in \
-      x86_64) helm_arch="amd64" ;; \
-      aarch64|arm64) helm_arch="arm64" ;; \
+      x86_64) tool_arch="amd64" ;; \
+      aarch64|arm64) tool_arch="arm64" ;; \
       *) echo "Unsupported arch: ${arch}" >&2; exit 1 ;; \
     esac; \
-    helm_url="https://get.helm.sh/helm-v${HELM_VERSION}-linux-${helm_arch}.tar.gz"; \
-    kustomize_url="https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_${helm_arch}.tar.gz"; \
-    HELM_URL="${helm_url}" KUSTOMIZE_URL="${kustomize_url}" python3 - <<'PY' && \
-    tar -xzf /tmp/helm.tar.gz -C /tmp && \
-    tar -xzf /tmp/kustomize.tar.gz -C /tmp kustomize && \
-    install -m 0755 "/tmp/linux-${helm_arch}/helm" /usr/local/bin/helm && \
-    install -m 0755 /tmp/kustomize /usr/local/bin/kustomize && \
-    rm -rf /tmp/helm.tar.gz /tmp/kustomize.tar.gz /tmp/kustomize "/tmp/linux-${helm_arch}" && \
-    ansible-navigator --version && \
-    helm version --short && \
-    kustomize version && \
-    dnf clean all && \
-    rm -rf /var/cache/dnf /var/cache/yum && \
+    curl -fsSL \
+      "https://get.helm.sh/helm-v${HELM_VERSION}-linux-${tool_arch}.tar.gz" \
+      -o /tmp/helm.tar.gz; \
+    curl -fsSL \
+      "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_${tool_arch}.tar.gz" \
+      -o /tmp/kustomize.tar.gz; \
+    tar -xzf /tmp/helm.tar.gz -C /tmp; \
+    tar -xzf /tmp/kustomize.tar.gz -C /tmp kustomize; \
+    install -m 0755 "/tmp/linux-${tool_arch}/helm" /usr/local/bin/helm; \
+    install -m 0755 /tmp/kustomize /usr/local/bin/kustomize; \
+    rm -rf /tmp/helm.tar.gz /tmp/kustomize.tar.gz /tmp/kustomize "/tmp/linux-${tool_arch}"; \
+    ansible-navigator --version; \
+    helm version --short; \
+    kustomize version; \
+    dnf clean all; \
+    rm -rf /var/cache/dnf /var/cache/yum; \
     rm -f /tmp/rpm-packages.txt /tmp/requirements.txt
-import os
-import urllib.request
-
-downloads = [
-    (os.environ["HELM_URL"], "/tmp/helm.tar.gz"),
-    (os.environ["KUSTOMIZE_URL"], "/tmp/kustomize.tar.gz"),
-]
-for url, out_path in downloads:
-    with urllib.request.urlopen(url) as resp, open(out_path, "wb") as handle:
-        handle.write(resp.read())
-PY
 
 USER runner
 WORKDIR /runner

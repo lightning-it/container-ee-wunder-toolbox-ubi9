@@ -1,1 +1,2 @@
-ansible-navigator
+ansible-navigator==26.1.2
+onigurumacffi==1.5.0
