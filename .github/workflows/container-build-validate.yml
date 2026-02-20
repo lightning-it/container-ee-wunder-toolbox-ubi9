@@ -8,6 +8,7 @@ on:
       - Dockerfile
       - requirements.txt
       - rpm-packages.txt
+      - copr-packages.txt
       - .github/workflows/container-build-validate.yml
       - .github/workflows/container-build-publish.yml
   workflow_dispatch:

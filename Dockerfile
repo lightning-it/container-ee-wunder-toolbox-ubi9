@@ -8,8 +8,12 @@ LABEL org.opencontainers.image.source="https://github.com/lightning-it/container
 USER 0
 ARG HELM_VERSION=3.19.0
 ARG KUSTOMIZE_VERSION=5.8.0
+ARG MODULIX_COPR_OWNER=litroc
+ARG MODULIX_COPR_PROJECT=modulix
+ARG MODULIX_COPR_CHROOT=epel-9-x86_64
 
 COPY rpm-packages.txt /tmp/rpm-packages.txt
+COPY copr-packages.txt /tmp/copr-packages.txt
 COPY requirements.txt /tmp/requirements.txt
 
 RUN set -eu; \
@@ -39,12 +43,17 @@ RUN set -eu; \
     install -m 0755 "/tmp/linux-${tool_arch}/helm" /usr/local/bin/helm; \
     install -m 0755 /tmp/kustomize /usr/local/bin/kustomize; \
     rm -rf /tmp/helm.tar.gz /tmp/kustomize.tar.gz /tmp/kustomize "/tmp/linux-${tool_arch}"; \
+    dnf -y install --allowerasing 'dnf-command(copr)'; \
+    dnf -y copr enable "${MODULIX_COPR_OWNER}/${MODULIX_COPR_PROJECT}" "${MODULIX_COPR_CHROOT}"; \
+    xargs -r dnf -y install --allowerasing < /tmp/copr-packages.txt; \
     ansible-navigator --version; \
     helm version --short; \
     kustomize version; \
+    command -v ansible-nav; \
+    command -v test-ansible.sh; \
     dnf clean all; \
     rm -rf /var/cache/dnf /var/cache/yum; \
-    rm -f /tmp/rpm-packages.txt /tmp/requirements.txt
+    rm -f /tmp/rpm-packages.txt /tmp/copr-packages.txt /tmp/requirements.txt
 
 USER runner
 WORKDIR /runner
