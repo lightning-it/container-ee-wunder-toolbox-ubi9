@@ -8,6 +8,7 @@ LABEL org.opencontainers.image.source="https://github.com/lightning-it/container
 USER 0
 ARG HELM_VERSION=3.19.0
 ARG KUSTOMIZE_VERSION=5.8.0
+ARG VAULT_VERSION=1.19.0
 ARG MODULIX_COPR_OWNER=litroc
 ARG MODULIX_COPR_PROJECT=modulix
 ARG MODULIX_COPR_CHROOT=epel-9-x86_64
@@ -38,17 +39,23 @@ RUN set -eu; \
     curl -fsSL \
       "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_${tool_arch}.tar.gz" \
       -o /tmp/kustomize.tar.gz; \
+    curl -fsSL \
+      "https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_${tool_arch}.zip" \
+      -o /tmp/vault.zip; \
     tar -xzf /tmp/helm.tar.gz -C /tmp; \
     tar -xzf /tmp/kustomize.tar.gz -C /tmp kustomize; \
+    python3 -c "import zipfile; zipfile.ZipFile('/tmp/vault.zip').extract('vault', '/tmp')"; \
     install -m 0755 "/tmp/linux-${tool_arch}/helm" /usr/local/bin/helm; \
     install -m 0755 /tmp/kustomize /usr/local/bin/kustomize; \
-    rm -rf /tmp/helm.tar.gz /tmp/kustomize.tar.gz /tmp/kustomize "/tmp/linux-${tool_arch}"; \
+    install -m 0755 /tmp/vault /usr/local/bin/vault; \
+    rm -rf /tmp/helm.tar.gz /tmp/kustomize.tar.gz /tmp/vault.zip /tmp/kustomize /tmp/vault "/tmp/linux-${tool_arch}"; \
     dnf -y install --allowerasing 'dnf-command(copr)'; \
     dnf -y copr enable "${MODULIX_COPR_OWNER}/${MODULIX_COPR_PROJECT}" "${MODULIX_COPR_CHROOT}"; \
     xargs -r dnf -y install --allowerasing < /tmp/copr-packages.txt; \
     ansible-navigator --version; \
     helm version --short; \
     kustomize version; \
+    vault --version; \
     command -v ansible-nav; \
     command -v test-ansible.sh; \
     dnf clean all; \
