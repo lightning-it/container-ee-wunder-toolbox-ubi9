@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.3.0...v1.4.0) (2026-02-20)
+
+### Features
+
+* add VAULT_VERSION pin and update Renovate configuration ([#15](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/issues/15)) ([2e88567](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/commit/2e88567a940434fc5d55c9e0ce7375555b7ed046))
+
 ## [1.3.0](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.2.0...v1.3.0) (2026-02-20)
 
 ### Features
