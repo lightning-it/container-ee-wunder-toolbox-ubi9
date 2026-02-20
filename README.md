@@ -4,6 +4,7 @@ Includes `ansible-navigator` in-container so automation does not depend on host 
 
 Dependency sources:
 - RPM packages: `rpm-packages.txt`
+- COPR RPM pins: `copr-packages.txt`
 - Python packages: `requirements.txt`
 
 ## Included tooling
@@ -11,22 +12,45 @@ Dependency sources:
 - `ansible-navigator`
 - `helm`
 - `kustomize`
+- `modulix-scripts` (installed from Fedora COPR)
 
 Helm and Kustomize are installed in the image during build from official release tarballs and
 pinned with `HELM_VERSION` and `KUSTOMIZE_VERSION` in `Dockerfile`.
 
+`modulix-scripts` is installed from COPR via `dnf copr enable` and the pinned
+package list in `copr-packages.txt`.
+Default COPR settings are configurable with build args:
+
+- `MODULIX_COPR_OWNER` (default: `litroc`)
+- `MODULIX_COPR_PROJECT` (default: `modulix`)
+- `MODULIX_COPR_CHROOT` (default: `epel-9-x86_64`)
+
+The package installs script payload under `/opt/modulix` and exposes
+command wrappers in `/usr/bin` (for example `ansible-nav` and `test-ansible.sh`).
+
 ## Build locally
 
 ```bash
-docker buildx build -t ee-wunder-toolbox-ubi9:local .
+podman build --format docker -t ee-wunder-toolbox-ubi9:local .
+```
+
+Use a different COPR project:
+
+```bash
+podman build --format docker \
+  --build-arg MODULIX_COPR_OWNER=litroc \
+  --build-arg MODULIX_COPR_PROJECT=modulix \
+  --build-arg MODULIX_COPR_CHROOT=epel-9-x86_64 \
+  -t ee-wunder-toolbox-ubi9:local .
 ```
 
 ## Quick checks
 
 ```bash
-docker run --rm ee-wunder-toolbox-ubi9:local ansible-navigator --version
-docker run --rm ee-wunder-toolbox-ubi9:local helm version --short
-docker run --rm ee-wunder-toolbox-ubi9:local kustomize version
+podman run --rm ee-wunder-toolbox-ubi9:local ansible-navigator --version
+podman run --rm ee-wunder-toolbox-ubi9:local helm version --short
+podman run --rm ee-wunder-toolbox-ubi9:local kustomize version
+podman run --rm ee-wunder-toolbox-ubi9:local sh -lc 'command -v ansible-nav && command -v test-ansible.sh'
 ```
 
 ## Helm usage
@@ -34,13 +58,13 @@ docker run --rm ee-wunder-toolbox-ubi9:local kustomize version
 Basic Helm command:
 
 ```bash
-docker run --rm ee-wunder-toolbox-ubi9:local helm version --short
+podman run --rm ee-wunder-toolbox-ubi9:local helm version --short
 ```
 
 Run against local kubeconfig:
 
 ```bash
-docker run --rm \
+podman run --rm \
   -v "$HOME/.kube:/runner/.kube:ro,Z" \
   -e KUBECONFIG=/runner/.kube/config \
   ee-wunder-toolbox-ubi9:local \
@@ -52,5 +76,5 @@ docker run --rm \
 Basic Kustomize command:
 
 ```bash
-docker run --rm -v "$PWD":/runner/project:ro,Z ee-wunder-toolbox-ubi9:local kustomize build /runner/project
+podman run --rm -v "$PWD":/runner/project:ro,Z ee-wunder-toolbox-ubi9:local kustomize build /runner/project
 ```

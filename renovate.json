@@ -115,6 +115,20 @@
       ],
       "datasourceTemplate": "github-tags",
       "depNameTemplate": "terraform-docs/terraform-docs"
+    },
+    {
+      "customType": "regex",
+      "description": "modulix-scripts COPR RPM pin",
+      "managerFilePatterns": [
+        "/copr-packages\\.txt$/"
+      ],
+      "matchStrings": [
+        "modulix-scripts-(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)-1\\.el9\\.noarch"
+      ],
+      "datasourceTemplate": "github-tags",
+      "depNameTemplate": "lightning-it/modulix",
+      "extractVersionTemplate": "^v(?<version>[0-9]+\\.[0-9]+\\.[0-9]+)$",
+      "versioningTemplate": "semver"
     }
   ]
 }
