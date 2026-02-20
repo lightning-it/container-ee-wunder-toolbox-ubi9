@@ -12,6 +12,7 @@ Dependency sources:
 - `ansible-navigator`
 - `helm`
 - `kustomize`
+- `vault`
 - `modulix-scripts` (installed from Fedora COPR)
 
 Helm and Kustomize are installed in the image during build from official release tarballs and
@@ -50,6 +51,7 @@ podman build --format docker \
 podman run --rm ee-wunder-toolbox-ubi9:local ansible-navigator --version
 podman run --rm ee-wunder-toolbox-ubi9:local helm version --short
 podman run --rm ee-wunder-toolbox-ubi9:local kustomize version
+podman run --rm ee-wunder-toolbox-ubi9:local vault --version
 podman run --rm ee-wunder-toolbox-ubi9:local sh -lc 'command -v ansible-nav && command -v test-ansible.sh'
 ```
 

@@ -105,6 +105,48 @@
     },
     {
       "customType": "regex",
+      "description": "Helm version pin in Dockerfile",
+      "managerFilePatterns": [
+        "/Dockerfile/"
+      ],
+      "matchStrings": [
+        "HELM_VERSION=(?<currentValue>[0-9.]+)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "helm/helm",
+      "extractVersionTemplate": "^v(?<version>[0-9.]+)$",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Kustomize version pin in Dockerfile",
+      "managerFilePatterns": [
+        "/Dockerfile/"
+      ],
+      "matchStrings": [
+        "KUSTOMIZE_VERSION=(?<currentValue>[0-9.]+)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "kubernetes-sigs/kustomize",
+      "extractVersionTemplate": "^kustomize/v(?<version>[0-9.]+)$",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Vault version pin in Dockerfile",
+      "managerFilePatterns": [
+        "/Dockerfile/"
+      ],
+      "matchStrings": [
+        "VAULT_VERSION=(?<currentValue>[0-9.]+)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "hashicorp/vault",
+      "extractVersionTemplate": "^v(?<version>[0-9.]+)$",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
       "description": "modulix-scripts COPR RPM pin",
       "managerFilePatterns": [
         "/copr-packages\\.txt$/"
