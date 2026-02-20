@@ -1,3 +1,14 @@
+## [1.3.0](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.2.0...v1.3.0) (2026-02-20)
+
+### Features
+
+* remove npm package rules from renovate configuration ([c55241a](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/commit/c55241ad132bb8606cc9ba4a6bc56cffa3861204))
+* remove npm package rules from renovate configuration ([bfeca41](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/commit/bfeca41b10bc687e1be9b119a759cce01a1d582c))
+
+### Bug Fixes
+
+* update dependency lightning-it/modulix to v1.1.0 ([#7](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/issues/7)) ([5522d61](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/commit/5522d61fe8d456273f0141364b1f8b917a3bfe2e))
+
 ## [1.2.0](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.1.0...v1.2.0) (2026-02-20)
 
 ### Features
