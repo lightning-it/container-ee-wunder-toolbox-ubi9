@@ -1,3 +1,10 @@
+## [1.2.0](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.1.0...v1.2.0) (2026-02-20)
+
+### Features
+
+* add support for modulix-scripts in Dockerfile and README ([8e0a2c0](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/commit/8e0a2c03a28107a6e825cd067c61fa36c6bc3026))
+* add support for modulix-scripts in Dockerfile and README; include copr-packages.txt for dependency management ([d91722d](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/commit/d91722ddba2b4c0efe434197d0a4050e0abc88b5))
+
 ## [1.1.0](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.0.0...v1.1.0) (2026-02-17)
 
 ### Features
