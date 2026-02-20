@@ -45,16 +45,7 @@ repos:
         pass_filenames: false
         files: ^\.github/workflows/.*\.ya?ml$
         entry: >-
-          bash -lc '
-            set -euo pipefail
-            shopt -s nullglob
-            workflows=(.github/workflows/*.yml .github/workflows/*.yaml)
-            if [ "${#workflows[@]}" -eq 0 ]; then
-              echo "No GitHub workflow files found, skipping actionlint."
-              exit 0
-            fi
-            docker run --rm -v "$PWD":/repo:z -w /repo rhysd/actionlint:latest "${workflows[@]}"
-          '
+          bash -lc 'docker run --rm -v "$PWD":/repo -w /repo rhysd/actionlint:latest'
 
   # -------------------------------------------------------------------
   # container build (only when build inputs changed)
@@ -117,6 +108,6 @@ repos:
         files: ^renovate(\.json|-container\.json)$
         entry: >-
           bash -lc 'docker run --rm
-          -v "$PWD":/repo:z -w /repo
+          -v "$PWD":/repo -w /repo
           renovate/renovate:latest
           renovate-config-validator'
