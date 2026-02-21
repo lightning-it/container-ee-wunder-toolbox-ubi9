@@ -80,3 +80,31 @@ Basic Kustomize command:
 ```bash
 podman run --rm -v "$PWD":/runner/project:ro,Z ee-wunder-toolbox-ubi9:local kustomize build /runner/project
 ```
+
+## Pre-commit usage (devtools image)
+
+Use the devtools image for `pre-commit`:
+
+```bash
+mkdir -p "$HOME/.cache/pre-commit"
+systemctl --user enable --now podman.socket
+SOCK="/run/user/$(id -u)/podman/podman.sock"
+REPO="$PWD"
+
+podman run --rm \
+  --userns keep-id \
+  --user "$(id -u):$(id -g)" \
+  --security-opt label=disable \
+  -v "$REPO":"$REPO":z \
+  -v "$HOME/.cache":"$HOME/.cache":z \
+  -v "$SOCK":"$SOCK" \
+  -w "$REPO" \
+  -e XDG_CACHE_HOME="$HOME/.cache" \
+  -e PRE_COMMIT_HOME="$HOME/.cache/pre-commit" \
+  -e DOCKER_HOST="unix://$SOCK" \
+  -e GIT_CONFIG_COUNT=1 \
+  -e GIT_CONFIG_KEY_0=safe.directory \
+  -e GIT_CONFIG_VALUE_0="$REPO" \
+  quay.io/l-it/ee-wunder-devtools-ubi9:latest \
+  pre-commit run --all-files
+```
