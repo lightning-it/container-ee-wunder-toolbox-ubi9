@@ -1,8 +1,8 @@
-FROM quay.io/l-it/ee-wunder-ansible-ubi9:v1.8.0
+FROM registry.access.redhat.com/ubi9/python-311:9.7-1771432269
 
 LABEL maintainer="Lightning IT"
 LABEL org.opencontainers.image.title="ee-wunder-toolbox-ubi9"
-LABEL org.opencontainers.image.description="Wunder operations toolbox based on ee-wunder-ansible-ubi9 for offline and restricted environments."
+LABEL org.opencontainers.image.description="Wunder operations toolbox for offline and restricted environments (ansible-navigator + helper tools, EE-first workflow)."
 LABEL org.opencontainers.image.source="https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9"
 
 USER 0
@@ -61,6 +61,50 @@ RUN set -eu; \
     dnf clean all; \
     rm -rf /var/cache/dnf /var/cache/yum; \
     rm -f /tmp/rpm-packages.txt /tmp/copr-packages.txt /tmp/requirements.txt
+
+RUN mkdir -p /runner /tmp/ansible /tmp/ansible/tmp && \
+    chmod 0775 /runner && \
+    chmod 1777 /tmp/ansible /tmp/ansible/tmp
+
+RUN cat > /usr/local/bin/ee-entrypoint <<'EOF' && chmod 0755 /usr/local/bin/ee-entrypoint
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -eq 0 ]; then
+  set -- /bin/bash
+fi
+
+# Provide passwd/group entries when container runs with arbitrary UID.
+if ! whoami >/dev/null 2>&1; then
+  uid="$(id -u)"
+  gid="$(id -g)"
+  home="${HOME:-/tmp}"
+
+  export NSS_WRAPPER_PASSWD="${TMPDIR:-/tmp}/passwd.nss_wrapper"
+  export NSS_WRAPPER_GROUP="${TMPDIR:-/tmp}/group.nss_wrapper"
+
+  (cat /etc/passwd 2>/dev/null || true) > "${NSS_WRAPPER_PASSWD}"
+  echo "eeuser:x:${uid}:${gid}:EE User:${home}:/bin/bash" >> "${NSS_WRAPPER_PASSWD}"
+
+  (cat /etc/group 2>/dev/null || true) > "${NSS_WRAPPER_GROUP}"
+  echo "eegroup:x:${gid}:" >> "${NSS_WRAPPER_GROUP}"
+
+  wrapper="/usr/lib64/libnss_wrapper.so"
+  if [ -f "${wrapper}" ]; then
+    export LD_PRELOAD="${wrapper}${LD_PRELOAD:+:${LD_PRELOAD}}"
+  fi
+fi
+
+exec "$@"
+EOF
+
+RUN id -u runner >/dev/null 2>&1 || useradd -u 1000 -m -d /runner runner && \
+    chown -R runner:runner /runner /tmp/ansible
+
+ENV HOME=/runner \
+    ANSIBLE_LOCAL_TEMP=/tmp/ansible/tmp \
+    ANSIBLE_REMOTE_TEMP=/tmp/ansible/tmp \
+    ANSIBLE_COLLECTIONS_PATH=/usr/share/ansible/collections:/usr/share/automation-controller/collections:/runner/project/collections-dev:/runner/project/collections:/runner/collections
 
 USER runner
 WORKDIR /runner
