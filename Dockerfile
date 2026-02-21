@@ -6,7 +6,7 @@ LABEL org.opencontainers.image.description="Wunder operations toolbox based on e
 LABEL org.opencontainers.image.source="https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9"
 
 USER 0
-ARG HELM_VERSION=3.19.0
+ARG HELM_VERSION=4.1.1
 ARG KUSTOMIZE_VERSION=5.8.0
 ARG VAULT_VERSION=1.19.0
 ARG MODULIX_COPR_OWNER=litroc
