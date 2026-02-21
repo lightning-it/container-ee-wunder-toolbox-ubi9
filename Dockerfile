@@ -7,7 +7,7 @@ LABEL org.opencontainers.image.source="https://github.com/lightning-it/container
 
 USER 0
 ARG HELM_VERSION=4.1.1
-ARG KUSTOMIZE_VERSION=5.8.0
+ARG KUSTOMIZE_VERSION=5.8.1
 ARG VAULT_VERSION=1.21.2
 ARG MODULIX_COPR_OWNER=litroc
 ARG MODULIX_COPR_PROJECT=modulix
