@@ -1,4 +1,4 @@
-FROM quay.io/l-it/ee-wunder-ansible-ubi9:v1.9.2
+FROM quay.io/l-it/ee-wunder-ansible-ubi9:v1.9.3
 
 LABEL maintainer="Lightning IT"
 LABEL org.opencontainers.image.title="ee-wunder-toolbox-ubi9"
