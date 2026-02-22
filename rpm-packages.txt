@@ -4,3 +4,5 @@ iproute
 vim-enhanced
 which
 oniguruma
+nss_wrapper
+podman
