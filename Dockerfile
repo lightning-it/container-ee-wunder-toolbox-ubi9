@@ -56,14 +56,15 @@ RUN set -eu; \
     helm version --short; \
     kustomize version; \
     vault --version; \
+    podman --version; \
     command -v ansible-nav; \
     command -v test-ansible.sh; \
     dnf clean all; \
     rm -rf /var/cache/dnf /var/cache/yum; \
     rm -f /tmp/rpm-packages.txt /tmp/copr-packages.txt /tmp/requirements.txt
 
-RUN mkdir -p /runner /tmp/ansible /tmp/ansible/tmp && \
-    chmod 0775 /runner && \
+RUN mkdir -p /runner /runner/.config /runner/.local/share/containers /tmp/ansible /tmp/ansible/tmp && \
+    chmod 0777 /runner /runner/.config /runner/.local /runner/.local/share /runner/.local/share/containers && \
     chmod 1777 /tmp/ansible /tmp/ansible/tmp
 
 RUN cat > /usr/local/bin/ee-entrypoint <<'EOF' && chmod 0755 /usr/local/bin/ee-entrypoint

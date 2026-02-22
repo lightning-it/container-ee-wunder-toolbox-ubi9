@@ -6,6 +6,7 @@ The toolbox intentionally stays minimal:
 - it does **not** embed Lightning IT or AAP collection bundles
 - it is meant to run playbooks through Execution Environment mode
 - collections should come from `quay.io/l-it/ee-wunder-ansible-ubi9:*` (or certified variant)
+- it includes `podman` CLI for nested EE execution via mounted host podman socket
 
 Dependency sources:
 - RPM packages: `rpm-packages.txt`
@@ -15,6 +16,7 @@ Dependency sources:
 ## Included tooling
 
 - `ansible-navigator`
+- `podman`
 - `helm`
 - `kustomize`
 - `vault`
@@ -54,6 +56,7 @@ podman build --format docker \
 
 ```bash
 podman run --rm ee-wunder-toolbox-ubi9:local ansible-navigator --version
+podman run --rm ee-wunder-toolbox-ubi9:local sh -lc 'command -v podman && podman --version'
 podman run --rm ee-wunder-toolbox-ubi9:local helm version --short
 podman run --rm ee-wunder-toolbox-ubi9:local kustomize version
 podman run --rm ee-wunder-toolbox-ubi9:local vault --version
