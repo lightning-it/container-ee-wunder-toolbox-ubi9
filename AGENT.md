@@ -15,3 +15,18 @@
   `customManagers` regex entry so updates remain automated.
 - Prefer GitHub release/tag data sources with an `extractVersionTemplate` when tags include prefixes
   like `v` or `kustomize/v`.
+
+## Shared-assets Managed Files
+
+- This repository receives centrally managed baseline files from `lightning-it/shared-assets`.
+- Do not hand-edit shared-managed files in this repo unless the same change is made in `shared-assets`.
+- Managed default files from `shared-assets/default`:
+  - `LICENSE`
+  - `CODE_OF_CONDUCT.md`
+  - `scripts/wunder-devtools-ee.sh`
+- Managed container baseline files from `shared-assets/container/base`:
+  - `.gitignore`
+  - `.pre-commit-config.yaml`
+  - `.releaserc`
+  - `.yamllint`
+  - `CONTRIBUTING.md`
