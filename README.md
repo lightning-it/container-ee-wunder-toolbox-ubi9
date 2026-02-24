@@ -25,16 +25,20 @@ Dependency sources:
 Helm and Kustomize are installed in the image during build from official release tarballs and
 pinned with `HELM_VERSION` and `KUSTOMIZE_VERSION` in `Dockerfile`.
 
-`modulix-automation-runtime` is installed from COPR via `dnf copr enable` and the pinned
-package list in `copr-packages.txt`.
+`modulix-automation-runtime` is installed from COPR via `dnf copr enable` and
+the pinned package list in `copr-packages.txt`.
 Default COPR settings are configurable with build args:
 
 - `MODULIX_COPR_OWNER` (default: `litroc`)
 - `MODULIX_COPR_PROJECT` (default: `modulix`)
-- `MODULIX_COPR_CHROOT` (default: `epel-9-x86_64`)
+- `MODULIX_COPR_CHROOT` (default: `auto`)
+
+`MODULIX_COPR_CHROOT=auto` maps by build architecture:
+- `x86_64` -> `epel-9-x86_64`
+- `aarch64/arm64` -> `epel-9-aarch64`
 
 The package installs script payload under `/opt/modulix` and exposes
-command wrappers in `/usr/bin` (for example `ansible-nav` and `test-ansible.sh`).
+command wrappers in `/usr/bin` (for example `ansible-nav` and `ansible-nav-local`).
 
 ## Build locally
 
@@ -48,7 +52,7 @@ Use a different COPR project:
 podman build --format docker \
   --build-arg MODULIX_COPR_OWNER=litroc \
   --build-arg MODULIX_COPR_PROJECT=modulix \
-  --build-arg MODULIX_COPR_CHROOT=epel-9-x86_64 \
+  --build-arg MODULIX_COPR_CHROOT=auto \
   -t ee-wunder-toolbox-ubi9:local .
 ```
 
@@ -60,7 +64,7 @@ podman run --rm ee-wunder-toolbox-ubi9:local sh -lc 'command -v podman && podman
 podman run --rm ee-wunder-toolbox-ubi9:local helm version --short
 podman run --rm ee-wunder-toolbox-ubi9:local kustomize version
 podman run --rm ee-wunder-toolbox-ubi9:local vault --version
-podman run --rm ee-wunder-toolbox-ubi9:local sh -lc 'command -v ansible-nav && command -v test-ansible.sh'
+podman run --rm ee-wunder-toolbox-ubi9:local sh -lc 'command -v ansible-nav && command -v ansible-nav-local'
 ```
 
 ## Helm usage

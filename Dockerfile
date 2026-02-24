@@ -11,7 +11,7 @@ ARG KUSTOMIZE_VERSION=5.8.1
 ARG VAULT_VERSION=1.21.2
 ARG MODULIX_COPR_OWNER=litroc
 ARG MODULIX_COPR_PROJECT=modulix
-ARG MODULIX_COPR_CHROOT=epel-9-x86_64
+ARG MODULIX_COPR_CHROOT=auto
 
 COPY rpm-packages.txt /tmp/rpm-packages.txt
 COPY copr-packages.txt /tmp/copr-packages.txt
@@ -29,10 +29,15 @@ RUN set -eu; \
     dnf -y remove gcc make python3-devel; \
     arch="$(uname -m)"; \
     case "${arch}" in \
-      x86_64) tool_arch="amd64" ;; \
-      aarch64|arm64) tool_arch="arm64" ;; \
+      x86_64) tool_arch="amd64"; copr_chroot_default="epel-9-x86_64" ;; \
+      aarch64|arm64) tool_arch="arm64"; copr_chroot_default="epel-9-aarch64" ;; \
       *) echo "Unsupported arch: ${arch}" >&2; exit 1 ;; \
     esac; \
+    if [ "${MODULIX_COPR_CHROOT}" = "auto" ]; then \
+      modulix_copr_chroot="${copr_chroot_default}"; \
+    else \
+      modulix_copr_chroot="${MODULIX_COPR_CHROOT}"; \
+    fi; \
     curl -fsSL \
       "https://get.helm.sh/helm-v${HELM_VERSION}-linux-${tool_arch}.tar.gz" \
       -o /tmp/helm.tar.gz; \
@@ -50,7 +55,8 @@ RUN set -eu; \
     install -m 0755 /tmp/vault /usr/local/bin/vault; \
     rm -rf /tmp/helm.tar.gz /tmp/kustomize.tar.gz /tmp/vault.zip /tmp/kustomize /tmp/vault "/tmp/linux-${tool_arch}"; \
     dnf -y install --allowerasing 'dnf-command(copr)'; \
-    dnf -y copr enable "${MODULIX_COPR_OWNER}/${MODULIX_COPR_PROJECT}" "${MODULIX_COPR_CHROOT}"; \
+    echo "Using COPR chroot: ${modulix_copr_chroot}"; \
+    dnf -y copr enable "${MODULIX_COPR_OWNER}/${MODULIX_COPR_PROJECT}" "${modulix_copr_chroot}"; \
     xargs -r dnf -y install --allowerasing < /tmp/copr-packages.txt; \
     ansible-navigator --version; \
     helm version --short; \
@@ -58,7 +64,7 @@ RUN set -eu; \
     vault --version; \
     podman --version; \
     command -v ansible-nav; \
-    command -v test-ansible.sh; \
+    command -v ansible-nav-local; \
     dnf clean all; \
     rm -rf /var/cache/dnf /var/cache/yum; \
     rm -f /tmp/rpm-packages.txt /tmp/copr-packages.txt /tmp/requirements.txt
