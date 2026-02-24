@@ -20,12 +20,12 @@ Dependency sources:
 - `helm`
 - `kustomize`
 - `vault`
-- `modulix-scripts` (installed from Fedora COPR)
+- `modulix-automation-runtime` (installed from Fedora COPR)
 
 Helm and Kustomize are installed in the image during build from official release tarballs and
 pinned with `HELM_VERSION` and `KUSTOMIZE_VERSION` in `Dockerfile`.
 
-`modulix-scripts` is installed from COPR via `dnf copr enable` and the pinned
+`modulix-automation-runtime` is installed from COPR via `dnf copr enable` and the pinned
 package list in `copr-packages.txt`.
 Default COPR settings are configurable with build args:
 
