@@ -1,3 +1,9 @@
+## [1.5.2](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.5.1...v1.5.2) (2026-02-24)
+
+### Bug Fixes
+
+* update modulix-scripts references to modulix-automation-runtime in documentation and configuration ([#35](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/issues/35)) ([9dd1fc8](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/commit/9dd1fc840881b8cc94ab22e96683c2c4a65ab06c))
+
 ## [1.5.1](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.5.0...v1.5.1) (2026-02-24)
 
 ### Bug Fixes
