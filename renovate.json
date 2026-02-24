@@ -68,43 +68,6 @@
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Terraform version pins in Dockerfile",
-      "managerFilePatterns": [
-        "/Dockerfile/"
-      ],
-      "matchStrings": [
-        "TF_VERSION=(?<currentValue>[0-9.]+)"
-      ],
-      "datasourceTemplate": "github-releases",
-      "depNameTemplate": "hashicorp/terraform",
-      "versioningTemplate": "hashicorp"
-    },
-    {
-      "customType": "regex",
-      "description": "TFLint version pins in Dockerfile",
-      "managerFilePatterns": [
-        "/Dockerfile/"
-      ],
-      "matchStrings": [
-        "TFLINT_VERSION=(?<currentValue>[0-9.]+)"
-      ],
-      "datasourceTemplate": "github-tags",
-      "depNameTemplate": "terraform-linters/tflint"
-    },
-    {
-      "customType": "regex",
-      "description": "terraform-docs version pins in Dockerfile",
-      "managerFilePatterns": [
-        "/Dockerfile/"
-      ],
-      "matchStrings": [
-        "TF_DOCS_VERSION=(?<currentValue>[0-9.]+)"
-      ],
-      "datasourceTemplate": "github-tags",
-      "depNameTemplate": "terraform-docs/terraform-docs"
-    },
-    {
-      "customType": "regex",
       "description": "Helm version pin in Dockerfile",
       "managerFilePatterns": [
         "/Dockerfile/"
@@ -155,7 +118,7 @@
         "modulix-automation-runtime-(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)-1\\.el9\\.noarch"
       ],
       "datasourceTemplate": "github-tags",
-      "depNameTemplate": "lightning-it/modulix",
+      "depNameTemplate": "lightning-it/modulix-automation",
       "extractVersionTemplate": "^v(?<version>[0-9]+\\.[0-9]+\\.[0-9]+)$",
       "versioningTemplate": "semver"
     }
