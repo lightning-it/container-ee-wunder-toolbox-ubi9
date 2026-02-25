@@ -1,3 +1,9 @@
+## [1.5.5](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.5.4...v1.5.5) (2026-02-25)
+
+### Bug Fixes
+
+* sync shared assets from lightning-it/shared-assets ([#45](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/issues/45)) ([cd89524](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/commit/cd89524be9ff1b8647b37a7d40ab0502faa6a068))
+
 ## [1.5.4](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.5.3...v1.5.4) (2026-02-25)
 
 ### Bug Fixes
