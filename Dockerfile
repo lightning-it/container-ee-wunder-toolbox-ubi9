@@ -59,6 +59,7 @@ RUN set -eu; \
     dnf -y copr enable "${MODULIX_COPR_OWNER}/${MODULIX_COPR_PROJECT}" "${modulix_copr_chroot}"; \
     xargs -r dnf -y install --allowerasing < /tmp/copr-packages.txt; \
     ansible-navigator --version; \
+    ansible-doc --version; \
     helm version --short; \
     kustomize version; \
     vault --version; \
