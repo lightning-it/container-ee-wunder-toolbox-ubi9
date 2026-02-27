@@ -1,3 +1,9 @@
+## [1.8.0](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.7.2...v1.8.0) (2026-02-27)
+
+### Features
+
+* new release ([4c3f8d1](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/commit/4c3f8d18ee9cd882f7e00e760cce62435a4ec910)), closes [#52](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/issues/52)
+
 ## [1.7.2](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.7.1...v1.7.2) (2026-02-27)
 
 ### Bug Fixes
