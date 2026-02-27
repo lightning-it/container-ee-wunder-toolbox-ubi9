@@ -1,3 +1,9 @@
+## [1.7.0](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.6.0...v1.7.0) (2026-02-27)
+
+### Features
+
+* version increased ([#56](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/issues/56)) ([5608db7](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/commit/5608db72645c0a5d87316c2d779544245f6e6b1b))
+
 ## [1.6.0](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.5.6...v1.6.0) (2026-02-26)
 
 ### Features
