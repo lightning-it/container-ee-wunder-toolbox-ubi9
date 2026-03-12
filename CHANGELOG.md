@@ -1,3 +1,9 @@
+## [1.8.1](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.8.0...v1.8.1) (2026-03-12)
+
+### Bug Fixes
+
+* update registry.access.redhat.com/ubi9/python-311 docker tag to v9.7-1773204149 ([#67](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/issues/67)) ([970e244](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/commit/970e24432d30785aeb7bdbd97af471a4d35ee0d6))
+
 ## [1.8.0](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.7.2...v1.8.0) (2026-02-27)
 
 ### Features
