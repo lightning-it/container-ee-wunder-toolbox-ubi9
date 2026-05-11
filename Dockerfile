@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/python-311:9.7-1773852542
+FROM registry.access.redhat.com/ubi9/python-311:9.7-1778488854
 
 LABEL maintainer="Lightning IT"
 LABEL org.opencontainers.image.title="ee-wunder-toolbox-ubi9"
