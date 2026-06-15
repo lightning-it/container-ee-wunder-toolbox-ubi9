@@ -1,3 +1,9 @@
+## [1.8.5](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.8.4...v1.8.5) (2026-06-15)
+
+### Bug Fixes
+
+* update dependency lightning-it/modulix-automation to v1.20.2 ([#112](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/issues/112)) ([b82a138](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/commit/b82a138970bde75d9130e94389540be091c4a726))
+
 ## [1.8.4](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/compare/v1.8.3...v1.8.4) (2026-06-14)
 
 ### Bug Fixes
