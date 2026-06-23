@@ -124,7 +124,7 @@
       "versioningTemplate": "semver"
     }
   ],
-  "baseBranchPatterns": [
+  "baseBranches": [
     "develop"
   ]
 }
