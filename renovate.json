@@ -7,7 +7,8 @@
   "timezone": "UTC",
   "schedule": [],
   "labels": [
-    "dependencies"
+    "dependencies",
+    "renovate"
   ],
   "lockFileMaintenance": {
     "enabled": true
@@ -122,5 +123,8 @@
       "extractVersionTemplate": "^v(?<version>[0-9]+\\.[0-9]+\\.[0-9]+)$",
       "versioningTemplate": "semver"
     }
+  ],
+  "baseBranchPatterns": [
+    "develop"
   ]
 }
