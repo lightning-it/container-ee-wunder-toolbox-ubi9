@@ -6,6 +6,6 @@
     "@semantic-release/release-notes-generator": "^14.0.1",
     "@semantic-release/github": "^12.0.0",
     "conventional-changelog-conventionalcommits": "^10.0.0",
-    "renovate": "43.244.3"
+    "renovate": "43.244.4"
   }
 }
