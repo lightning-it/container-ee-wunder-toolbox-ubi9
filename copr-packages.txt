@@ -1,1 +1,1 @@
-modulix-automation-runtime-1.28.0-1.el9.noarch
+modulix-automation-runtime-1.28.3-1.el9.noarch
