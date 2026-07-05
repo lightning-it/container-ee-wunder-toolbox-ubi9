@@ -1,4 +1,30 @@
 # container-ee-wunder-toolbox-ubi9
+
+<!-- BEGIN LIT_SHARED_RELEASE_MODEL -->
+
+[![CI](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/actions/workflows/container-ci.yml/badge.svg?branch=develop)](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/actions/workflows/container-ci.yml)
+[![Release](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/actions/workflows/container-build-publish.yml/badge.svg?branch=main)](https://github.com/lightning-it/container-ee-wunder-toolbox-ubi9/actions/workflows/container-build-publish.yml)
+[![Quay.io](https://img.shields.io/badge/quay.io-ee-wunder-toolbox-ubi9-blue)](https://quay.io/organization/l-it)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
+## Release and Quality Model
+
+This repository follows the Lightning IT shared release and quality model.
+
+See [RELEASE.md](./RELEASE.md) for:
+
+- branch and release flow
+- required quality checks
+- test matrix
+- release evidence
+- artifact publishing
+- supported repository-specific release behavior
+
+Repository classification: **Container Image**.
+Required test profiles: `pre-commit, lint, container-build, container-smoke, trivy, release-validation`.
+Publishing targets: `github-release, quay.io`.
+
+<!-- END LIT_SHARED_RELEASE_MODEL -->
 UBI9-based Wunder operations toolbox for Podman-driven automation in offline and restricted environments.
 Includes `ansible-navigator` in-container so automation does not depend on host Ansible tooling.
 
