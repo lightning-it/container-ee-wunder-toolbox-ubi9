@@ -12,42 +12,6 @@
 
 <!-- END LIT_QUALITY_BADGES -->
 
-<!-- BEGIN LIT_COMPATIBILITY_MATRIX -->
-
-## Compatibility Matrix
-
-| Image Version | Image | Base Platform | Runtime | Test Type | Validation |
-|---|---|---|---|---|---|
-| Current release | quay.io/l-it/ee-wunder-toolbox-ubi9 | ubi9 | ubi9, podman, docker-buildx | Build / Smoke / Trivy | See GitHub Release evidence |
-| Current release | quay.io/l-it/ee-wunder-toolbox-ubi9 | podman | ubi9, podman, docker-buildx | Build / Smoke / Trivy | See GitHub Release evidence |
-| Current release | quay.io/l-it/ee-wunder-toolbox-ubi9 | docker-buildx | ubi9, podman, docker-buildx | Build / Smoke / Trivy | See GitHub Release evidence |
-
-Validation proof for each released version is stored in the corresponding GitHub Release evidence.
-
-<!-- END LIT_COMPATIBILITY_MATRIX -->
-
-<!-- BEGIN LIT_RELEASE_QUALITY_MODEL -->
-
-## Release and Quality Model
-
-This repository follows the Lightning IT shared release and quality model.
-The README shows the current supported and tested matrix.
-Exact per-version proof is stored with every GitHub Release as `release-evidence.md` and `release-evidence.json`.
-
-See:
-
-- [RELEASE.md](./RELEASE.md)
-- [TESTING.md](./TESTING.md)
-- [GitHub Releases](../../releases)
-
-Repository classification: **Container Image**.
-Required test profiles: `pre-commit, lint, container-build, container-smoke, trivy, release-validation`.
-Publishing targets: `github-release, quay.io`.
-
-Release evidence records the exact GitHub Actions run, validated matrix rows, built artifacts, publish result, and security status for each release.
-
-<!-- END LIT_RELEASE_QUALITY_MODEL -->
-
 UBI9-based Wunder operations toolbox for Podman-driven automation in offline and restricted environments.
 Includes `ansible-navigator` in-container so automation does not depend on host Ansible tooling.
 
@@ -169,3 +133,64 @@ podman run --rm \
   quay.io/l-it/ee-wunder-devtools-ubi9:latest \
   pre-commit run --all-files
 ```
+
+## Security
+
+See [SECURITY.md](./SECURITY.md) for supported versions and vulnerability reporting.
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for contribution and review expectations.
+
+## License
+
+See [LICENSE](./LICENSE).
+
+<!-- BEGIN LIT_RELEASE_QUALITY_MODEL -->
+
+## Release and Quality Model
+
+This repository follows the Lightning IT shared release and quality model.
+The README shows the current supported and tested matrix.
+Exact per-version validation proof is stored with each GitHub Release as `release-evidence.md` and `release-evidence.json`.
+Releases are created from the protected `main` branch after a reviewed `develop -> main` release promotion.
+Container releases validate build, smoke behavior, Trivy scanning, and Quay.io publishing where enabled.
+
+See:
+
+- [RELEASE.md](./RELEASE.md)
+- [TESTING.md](./TESTING.md)
+- [GitHub Releases](../../releases)
+
+Repository classification: **Container Image**.
+Required test profiles: `pre-commit, lint, container-build, container-smoke, trivy, release-validation`.
+Publishing targets: `github-release, quay.io`.
+
+<!-- END LIT_RELEASE_QUALITY_MODEL -->
+
+<!-- BEGIN LIT_COMPATIBILITY_MATRIX -->
+
+## Compatibility Matrix
+
+| Image Version | Base Image | Runtime | Validation |
+|---|---|---|---|
+| Latest release | ubi9 | Podman / GitHub Actions | See release evidence |
+| Latest release | podman | Podman / GitHub Actions | See release evidence |
+| Latest release | docker-buildx | Podman / GitHub Actions | See release evidence |
+
+Validation proof for each released version is stored in the corresponding GitHub Release evidence.
+
+<!-- END LIT_COMPATIBILITY_MATRIX -->
+
+## Release Evidence
+
+Every released version includes immutable release evidence attached to the corresponding GitHub Release.
+The evidence records:
+
+- tested matrix combinations
+- GitHub Actions run links
+- artifact references
+- publish status
+- security scan status
+
+See [GitHub Releases](../../releases), [RELEASE.md](./RELEASE.md), and [TESTING.md](./TESTING.md) for the release process and validation model.
