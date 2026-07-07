@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/python-311:9.8-1779945715
+FROM registry.access.redhat.com/ubi9/python-311:9.8-1779945715@sha256:a0bdb55576fc5b8d6704279307817828ef027e1065533ceba133fe9516003a6c
 
 LABEL maintainer="Lightning IT"
 LABEL org.opencontainers.image.title="ee-wunder-toolbox-ubi9"
@@ -19,6 +19,7 @@ ARG ONIGURUMA_HEADER_SHA256=7fb0a26767a8d2c31af3739ddd452b63860d520ef4b54fffbf55
 COPY rpm-packages.txt /tmp/rpm-packages.txt
 COPY copr-packages.txt /tmp/copr-packages.txt
 COPY requirements.txt /tmp/requirements.txt
+COPY requirements.lock /tmp/requirements.lock
 COPY scripts/container-download-verified.sh /usr/local/lib/container-download-verified.sh
 COPY scripts/ee-entrypoint.sh /usr/local/bin/ee-entrypoint
 
@@ -32,7 +33,7 @@ RUN set -euo pipefail; \
       -o /usr/local/include/oniguruma.h; \
     printf '%s  %s\n' "${ONIGURUMA_HEADER_SHA256}" /usr/local/include/oniguruma.h | sha256sum --check --status; \
     ln -sf /usr/lib64/libonig.so.5 /usr/lib64/libonig.so; \
-    PIP_NO_BINARY=onigurumacffi python3 -m pip install --no-cache-dir -r /tmp/requirements.txt; \
+    PIP_NO_BINARY=onigurumacffi python3 -m pip install --no-cache-dir --require-hashes -r /tmp/requirements.lock; \
     rm -f /usr/local/include/oniguruma.h /usr/lib64/libonig.so; \
     dnf -y remove gcc make python3-devel; \
     arch="$(uname -m)"; \
@@ -83,7 +84,7 @@ RUN set -euo pipefail; \
     command -v ansible-nav-local; \
     dnf clean all; \
     rm -rf /var/cache/dnf /var/cache/yum; \
-    rm -f /tmp/rpm-packages.txt /tmp/copr-packages.txt /tmp/requirements.txt
+    rm -f /tmp/rpm-packages.txt /tmp/copr-packages.txt /tmp/requirements.txt /tmp/requirements.lock
 
 RUN mkdir -p /runner /runner/.config /runner/.local/share/containers /tmp/ansible /tmp/ansible/tmp && \
     chmod 0777 /runner /runner/.config /runner/.local /runner/.local/share /runner/.local/share/containers && \
