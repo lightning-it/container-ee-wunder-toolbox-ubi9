@@ -247,7 +247,7 @@ jobs:
                 if [ -z "${review_id}" ]; then
                   continue
                 fi
-                if [ -n "${rejected_review_ids["${review_id}"]:-}" ]; then
+                if [ -n "${rejected_review_ids[${review_id}]:-}" ]; then
                   continue
                 fi
                 if review_comments_clean "${review_id}" "${head_sha}"; then
