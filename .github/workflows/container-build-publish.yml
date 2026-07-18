@@ -89,7 +89,7 @@ jobs:
           echo "Using SHORT_SHA=${short_sha}"
 
       - name: Set up QEMU (multi-arch)
-        uses: docker/setup-qemu-action@06116385d9baf250c9f4dcb4858b16962ea869c3  # v4
+        uses: docker/setup-qemu-action@96fe6ef7f33517b61c61be40b68a1882f3264fb8  # v4
         with:
           image: docker.io/tonistiigi/binfmt:qemu-v10.2.3@sha256:465d3fdd28d0f2b871ba4b4ec98bd183292e96167f00d9fd40bd249f8632d705
 
