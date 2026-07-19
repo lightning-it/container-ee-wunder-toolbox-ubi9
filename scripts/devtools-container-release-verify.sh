@@ -43,10 +43,10 @@ workflow_identity="https://github.com/${GITHUB_REPOSITORY}/.github/workflows/con
 workflow_identity_regexp="^https://github\\.com/${GITHUB_REPOSITORY}/\\.github/workflows/container-build-publish\\.yml@refs/tags/${RELEASE_TAG}$"
 case "$(detect_targetarch)" in
   amd64)
-    trivy_default="docker.io/aquasec/trivy:0.71.2@sha256:db2ae74f87719ab629e3b82e43f86447edb85e3f55277f3daf8cf7747155c503"
+    trivy_default="docker.io/aquasec/trivy:0.72.0@sha256:c6e969c5662a546ad5de4a73c2a6b7a7c627f86d916903e175aa623af5b97ada"
     ;;
   arm64)
-    trivy_default="docker.io/aquasec/trivy:0.71.2@sha256:abc2c8666acb586aa08577062da519f83ca0565f19a9360b78fc02ac9910d2f7"
+    trivy_default="docker.io/aquasec/trivy:0.72.0@sha256:405015d1cd07a2630301169e694a5a420afc4dd553fb462189d4f109ba56a6df"
     ;;
 esac
 trivy_image="${TRIVY_IMAGE:-$trivy_default}"
