@@ -1,4 +1,5 @@
 {
+  "name": "container-ee-wunder-toolbox-ubi9",
   "packageManager": "npm@12.0.1",
   "devDependencies": {
     "@semantic-release/commit-analyzer": "^13.0.1",
