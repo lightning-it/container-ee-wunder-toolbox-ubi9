@@ -1,81 +1,55 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":semanticCommitType(chore)",
+    ":semanticCommitScope(deps)"
   ],
-  "dependencyDashboard": true,
+  "renovate-config": {
+    "enabled": false
+  },
+  "labels": ["dependencies", "renovate"],
+  "baseBranchPatterns": ["develop"],
   "timezone": "UTC",
   "schedule": [],
-  "labels": [
-    "dependencies",
-    "renovate"
-  ],
-  "lockFileMaintenance": {
-    "enabled": true
-  },
+  "rebaseWhen": "behind-base-branch",
+  "prConcurrentLimit": 5,
   "packageRules": [
     {
-      "matchManagers": [
-        "dockerfile"
+      "description": "Automerge safe non-major updates into develop after CI passes",
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest",
+        "pinDigest",
+        "lockFileMaintenance"
       ],
-      "groupName": "Base image and Terraform tooling"
+      "addLabels": ["safe-automerge"],
+      "automerge": true,
+      "automergeType": "pr"
     },
     {
-      "matchManagers": [
-        "pip_requirements"
-      ],
-      "groupName": "Python tools"
+      "description": "Require manual approval for major updates",
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["breaking-update"],
+      "automerge": false,
+      "dependencyDashboardApproval": true
     },
     {
-      "matchManagers": [
-        "pip_requirements"
-      ],
-      "matchPackageNames": [
-        "ansible-core"
-      ],
-      "allowedVersions": ">=2.18.0 <2.19.0"
-    },
-    {
-      "matchManagers": [
-        "pip_requirements"
-      ],
-      "matchPackageNames": [
-        "ansible-lint"
-      ],
-      "allowedVersions": "<7.0.0"
-    },
-    {
-      "matchManagers": [
-        "pip_requirements"
-      ],
-      "matchPackageNames": [
-        "molecule",
-        "molecule-plugins"
-      ],
-      "allowedVersions": "<6.1.0",
-      "rangeStrategy": "pin"
-    },
-    {
-      "matchManagers": [
-        "pip_requirements"
-      ],
-      "matchPackageNames": [
-        "docker"
-      ],
-      "allowedVersions": ">=6.1.0 <7.0.0",
-      "rangeStrategy": "pin"
+      "description": "Keep every component of the GitHub Actions toolchain on one version",
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions"
     }
   ],
   "customManagers": [
     {
       "customType": "regex",
       "description": "Helm version pin in Dockerfile",
-      "managerFilePatterns": [
-        "/Dockerfile/"
-      ],
-      "matchStrings": [
-        "HELM_VERSION=(?<currentValue>[0-9.]+)"
-      ],
+      "managerFilePatterns": ["/Dockerfile/"],
+      "matchStrings": ["HELM_VERSION=(?<currentValue>[0-9.]+)"],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "helm/helm",
       "extractVersionTemplate": "^v(?<version>[0-9.]+)$",
@@ -84,12 +58,8 @@
     {
       "customType": "regex",
       "description": "Kustomize version pin in Dockerfile",
-      "managerFilePatterns": [
-        "/Dockerfile/"
-      ],
-      "matchStrings": [
-        "KUSTOMIZE_VERSION=(?<currentValue>[0-9.]+)"
-      ],
+      "managerFilePatterns": ["/Dockerfile/"],
+      "matchStrings": ["KUSTOMIZE_VERSION=(?<currentValue>[0-9.]+)"],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "kubernetes-sigs/kustomize",
       "extractVersionTemplate": "^kustomize/v(?<version>[0-9.]+)$",
@@ -98,12 +68,8 @@
     {
       "customType": "regex",
       "description": "Vault version pin in Dockerfile",
-      "managerFilePatterns": [
-        "/Dockerfile/"
-      ],
-      "matchStrings": [
-        "VAULT_VERSION=(?<currentValue>[0-9.]+)"
-      ],
+      "managerFilePatterns": ["/Dockerfile/"],
+      "matchStrings": ["VAULT_VERSION=(?<currentValue>[0-9.]+)"],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "hashicorp/vault",
       "extractVersionTemplate": "^v(?<version>[0-9.]+)$",
@@ -112,9 +78,7 @@
     {
       "customType": "regex",
       "description": "modulix-automation-runtime COPR RPM pin",
-      "managerFilePatterns": [
-        "/copr-packages\\.txt$/"
-      ],
+      "managerFilePatterns": ["/copr-packages\\.txt$/"],
       "matchStrings": [
         "modulix-automation-runtime-(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)-1\\.el9\\.noarch"
       ],
@@ -123,8 +87,5 @@
       "extractVersionTemplate": "^v(?<version>[0-9]+\\.[0-9]+\\.[0-9]+)$",
       "versioningTemplate": "semver"
     }
-  ],
-  "baseBranches": [
-    "develop"
   ]
 }
