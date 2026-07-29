@@ -39,21 +39,17 @@ This repository follows the Lightning IT shared release and quality model.
 - Images are tagged with immutable version tags, git SHA tags, and `latest` for stable `main` releases.
 - Container validation includes build, start, smoke, healthcheck where applicable, labels, and vulnerability scanning.
 - Every release records the immutable image digest and attaches a CycloneDX SBOM, SLSA provenance statement, checksum manifest, and Sigstore bundle.
+- The immutable GitHub Release contains at least these required consumer-verifiable evidence assets:
+  - `release-evidence.json`
+  - `release-evidence.md`
+  - `release-provenance.intoto.jsonl`
+  - `sbom.cdx.json`
+  - `SHA256SUMS`
+  - `SHA256SUMS.sigstore.json`
 
 ## Consumer Verification
 
 Download the six release-evidence assets from the selected immutable version tag, then verify their checksums and the keyless signature before trusting them:
-
-- `release-evidence.json`
-- `release-evidence.md`
-- `release-provenance.intoto.jsonl`
-- `sbom.cdx.json`
-- `SHA256SUMS`
-- `SHA256SUMS.sigstore.json`
-
-`SHA256SUMS` covers both evidence files, the provenance statement, and the
-standalone CycloneDX SBOM. Run the commands from the directory containing all
-six assets:
 
 ```bash
 sha256sum -c SHA256SUMS
