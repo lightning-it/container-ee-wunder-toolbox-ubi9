@@ -44,6 +44,17 @@ This repository follows the Lightning IT shared release and quality model.
 
 Download the six release-evidence assets from the selected immutable version tag, then verify their checksums and the keyless signature before trusting them:
 
+- `release-evidence.json`
+- `release-evidence.md`
+- `release-provenance.intoto.jsonl`
+- `sbom.cdx.json`
+- `SHA256SUMS`
+- `SHA256SUMS.sigstore.json`
+
+`SHA256SUMS` covers both evidence files, the provenance statement, and the
+standalone CycloneDX SBOM. Run the commands from the directory containing all
+six assets:
+
 ```bash
 sha256sum -c SHA256SUMS
 cosign verify-blob \
