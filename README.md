@@ -185,6 +185,8 @@ This repository follows the Lightning IT shared release and quality model.
 The README shows the current supported and tested matrix.
 Exact per-version validation proof is stored with each GitHub Release as `release-evidence.md` and `release-evidence.json`.
 Releases are created from the protected `main` branch after a reviewed `develop -> main` release promotion.
+Release back-syncs preserve the `main` merge-commit ancestry on `develop`; they
+must not be replaced by rebasing or recreating already released changes.
 Container releases validate build, smoke behavior, Trivy scanning, and Quay.io publishing where enabled.
 
 See:
