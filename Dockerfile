@@ -8,7 +8,7 @@ LABEL org.opencontainers.image.source="https://github.com/lightning-it/container
 USER 0
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-ARG HELM_VERSION=4.2.3
+ARG HELM_VERSION=4.2.4
 ARG KUSTOMIZE_VERSION=5.8.1
 ARG VAULT_VERSION=2.0.4
 ARG MODULIX_COPR_OWNER=litroc
