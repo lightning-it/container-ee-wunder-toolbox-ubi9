@@ -9,7 +9,6 @@ ARG KUSTOMIZE_COMMIT=9790a1c3efd2fd35f1b768d495112834176581c1
 ARG KUSTOMIZE_X_TEXT_VERSION=0.39.0
 ARG VAULT_VERSION=2.0.4
 ARG VAULT_COMMIT=c9e9d1d4ddd4b55aae79a8949adffa9e96338720
-ARG VAULT_BUILD_DATE=2026-08-03T20:14:36Z
 
 COPY scripts/build-patched-go-tools.sh /usr/local/bin/build-patched-go-tools
 RUN chmod 0755 /usr/local/bin/build-patched-go-tools && \

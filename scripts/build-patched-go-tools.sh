@@ -39,7 +39,7 @@ verify_release_tag() {
 for name in \
   HELM_VERSION HELM_COMMIT HELM_ORAS_VERSION \
   KUSTOMIZE_VERSION KUSTOMIZE_COMMIT KUSTOMIZE_X_TEXT_VERSION \
-  VAULT_VERSION VAULT_COMMIT VAULT_BUILD_DATE; do
+  VAULT_VERSION VAULT_COMMIT; do
   require_value "$name"
 done
 
@@ -90,13 +90,16 @@ clone_exact \
   "$VAULT_COMMIT" \
   "$SOURCE_DIR/vault"
 verify_release_tag "$SOURCE_DIR/vault" "v${VAULT_VERSION}" "$VAULT_COMMIT"
+vault_build_date="$(git -C "$SOURCE_DIR/vault" show -s --format=%cI "$VAULT_COMMIT")"
+readonly vault_build_date
+test -n "$vault_build_date"
 (
   cd "$SOURCE_DIR/vault"
   go build \
     -buildvcs=false \
     -trimpath \
     -tags=vault \
-    -ldflags="-s -w -X github.com/hashicorp/vault/version.GitCommit=${VAULT_COMMIT} -X github.com/hashicorp/vault/version.BuildDate=${VAULT_BUILD_DATE} -X github.com/hashicorp/vault/version.VersionMetadata=${REBUILD_METADATA}" \
+    -ldflags="-s -w -X github.com/hashicorp/vault/version.GitCommit=${VAULT_COMMIT} -X github.com/hashicorp/vault/version.BuildDate=${vault_build_date} -X github.com/hashicorp/vault/version.VersionMetadata=${REBUILD_METADATA}" \
     -o "$OUT_DIR/vault" \
     .
 )
@@ -105,4 +108,4 @@ chmod 0755 "$OUT_DIR/helm" "$OUT_DIR/kustomize" "$OUT_DIR/vault"
 "$OUT_DIR/helm" version --short | grep -F "v${HELM_VERSION}+${REBUILD_METADATA}"
 "$OUT_DIR/kustomize" version | grep -F "v${KUSTOMIZE_VERSION}+${REBUILD_METADATA}"
 "$OUT_DIR/vault" version | grep -F "Vault v${VAULT_VERSION}+${REBUILD_METADATA}"
-"$OUT_DIR/vault" version | grep -F "built ${VAULT_BUILD_DATE}"
+"$OUT_DIR/vault" version | grep -F "built ${vault_build_date}"
