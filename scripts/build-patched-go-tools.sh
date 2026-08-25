@@ -107,7 +107,7 @@ verify_release_tag \
   test "$(go list -m -f '{{.Version}}' golang.org/x/text)" = "v${KUSTOMIZE_X_TEXT_VERSION}"
   verify_module_override_scope \
     "$SOURCE_DIR/kustomize" "$KUSTOMIZE_COMMIT" \
-    kustomize/go.mod kustomize/go.sum
+    go.work go.work.sum kustomize/go.mod kustomize/go.sum
   go build \
     -buildvcs=false \
     -trimpath \
