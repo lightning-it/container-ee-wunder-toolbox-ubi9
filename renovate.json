@@ -7,9 +7,6 @@
     ":semanticCommitType(chore)",
     ":semanticCommitScope(deps)"
   ],
-  "renovate-config": {
-    "enabled": false
-  },
   "labels": ["dependencies", "renovate"],
   "baseBranchPatterns": ["develop"],
   "timezone": "UTC",
@@ -17,6 +14,11 @@
   "rebaseWhen": "behind-base-branch",
   "prConcurrentLimit": 5,
   "packageRules": [
+    {
+      "description": "Do not update Renovate configuration dependencies",
+      "matchManagers": ["renovate-config"],
+      "enabled": false
+    },
     {
       "description": "Automerge safe non-major updates into develop after CI passes",
       "matchUpdateTypes": [
@@ -77,31 +79,75 @@
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Helm version pin in Dockerfile",
+      "description": "Go builder version and immutable image digest in Dockerfile",
       "managerFilePatterns": ["/Dockerfile/"],
-      "matchStrings": ["HELM_VERSION=(?<currentValue>[0-9.]+)"],
-      "datasourceTemplate": "github-releases",
+      "matchStrings": [
+        "ARG GO_VERSION=(?<currentValue>[0-9.]+)\\nFROM golang:\\$\\{GO_VERSION\\}-bookworm@(?<currentDigest>sha256:[a-f0-9]{64})"
+      ],
+      "autoReplaceStringTemplate": "ARG GO_VERSION={{{newValue}}}\\nFROM golang:${GO_VERSION}-bookworm@{{{newDigest}}}",
+      "datasourceTemplate": "docker",
+      "packageNameTemplate": "docker.io/library/golang",
+      "extractVersionTemplate": "^(?<version>[0-9.]+)-bookworm$",
+      "versioningTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Helm release and immutable commit pins in Dockerfile",
+      "managerFilePatterns": ["/Dockerfile/"],
+      "matchStrings": [
+        "ARG HELM_VERSION=(?<currentValue>[0-9.]+)\\nARG HELM_COMMIT=(?<currentDigest>[a-f0-9]{40})"
+      ],
+      "autoReplaceStringTemplate": "ARG HELM_VERSION={{{newValue}}}\\nARG HELM_COMMIT={{{newDigest}}}",
+      "datasourceTemplate": "github-tags",
       "depNameTemplate": "helm/helm",
       "extractVersionTemplate": "^v(?<version>[0-9.]+)$",
       "versioningTemplate": "semver"
     },
     {
       "customType": "regex",
-      "description": "Kustomize version pin in Dockerfile",
+      "description": "Kustomize release and immutable commit pins in Dockerfile",
       "managerFilePatterns": ["/Dockerfile/"],
-      "matchStrings": ["KUSTOMIZE_VERSION=(?<currentValue>[0-9.]+)"],
-      "datasourceTemplate": "github-releases",
+      "matchStrings": [
+        "ARG KUSTOMIZE_VERSION=(?<currentValue>[0-9.]+)\\nARG KUSTOMIZE_COMMIT=(?<currentDigest>[a-f0-9]{40})"
+      ],
+      "autoReplaceStringTemplate": "ARG KUSTOMIZE_VERSION={{{newValue}}}\\nARG KUSTOMIZE_COMMIT={{{newDigest}}}",
+      "datasourceTemplate": "github-tags",
       "depNameTemplate": "kubernetes-sigs/kustomize",
       "extractVersionTemplate": "^kustomize/v(?<version>[0-9.]+)$",
       "versioningTemplate": "semver"
     },
     {
       "customType": "regex",
-      "description": "Vault version pin in Dockerfile",
+      "description": "Vault release and immutable commit pins in Dockerfile",
       "managerFilePatterns": ["/Dockerfile/"],
-      "matchStrings": ["VAULT_VERSION=(?<currentValue>[0-9.]+)"],
-      "datasourceTemplate": "github-releases",
+      "matchStrings": [
+        "ARG VAULT_VERSION=(?<currentValue>[0-9.]+)\\nARG VAULT_COMMIT=(?<currentDigest>[a-f0-9]{40})"
+      ],
+      "autoReplaceStringTemplate": "ARG VAULT_VERSION={{{newValue}}}\\nARG VAULT_COMMIT={{{newDigest}}}",
+      "datasourceTemplate": "github-tags",
       "depNameTemplate": "hashicorp/vault",
+      "extractVersionTemplate": "^v(?<version>[0-9.]+)$",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Helm ORAS security override in Dockerfile",
+      "managerFilePatterns": ["/Dockerfile/"],
+      "matchStrings": ["ARG HELM_ORAS_VERSION=(?<currentValue>[0-9.]+)"],
+      "datasourceTemplate": "go",
+      "depNameTemplate": "oras.land/oras-go/v2",
+      "extractVersionTemplate": "^v(?<version>[0-9.]+)$",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Kustomize x/text security override in Dockerfile",
+      "managerFilePatterns": ["/Dockerfile/"],
+      "matchStrings": [
+        "ARG KUSTOMIZE_X_TEXT_VERSION=(?<currentValue>[0-9.]+)"
+      ],
+      "datasourceTemplate": "go",
+      "depNameTemplate": "golang.org/x/text",
       "extractVersionTemplate": "^v(?<version>[0-9.]+)$",
       "versioningTemplate": "semver"
     },
