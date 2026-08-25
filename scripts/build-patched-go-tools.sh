@@ -63,13 +63,19 @@ verify_module_override_scope() {
 }
 
 for name in \
+  GO_VERSION \
   HELM_VERSION HELM_COMMIT HELM_ORAS_VERSION \
   KUSTOMIZE_VERSION KUSTOMIZE_COMMIT KUSTOMIZE_X_TEXT_VERSION \
   VAULT_VERSION VAULT_COMMIT; do
   require_value "$name"
 done
 
-test "$(go env GOVERSION)" = "go1.26.6"
+readonly EXPECTED_GO_VERSION="go${GO_VERSION}"
+actual_go_version="$(go env GOVERSION)"
+if [ "$actual_go_version" != "$EXPECTED_GO_VERSION" ]; then
+  echo "Error: expected Go toolchain ${EXPECTED_GO_VERSION}, got ${actual_go_version}" >&2
+  exit 1
+fi
 export CGO_ENABLED=0 GOTOOLCHAIN=local
 install -d -m 0755 "$OUT_DIR" "$SOURCE_DIR"
 
