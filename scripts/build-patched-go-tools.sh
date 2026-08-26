@@ -142,7 +142,10 @@ test -n "$vault_build_date"
 )
 
 chmod 0755 "$OUT_DIR/helm" "$OUT_DIR/kustomize" "$OUT_DIR/vault"
-"$OUT_DIR/helm" version --short | grep -F "v${HELM_VERSION}+${REBUILD_METADATA}"
-"$OUT_DIR/kustomize" version | grep -F "v${KUSTOMIZE_VERSION}+${REBUILD_METADATA}"
-"$OUT_DIR/vault" version | grep -F "Vault v${VAULT_VERSION}+${REBUILD_METADATA}"
-"$OUT_DIR/vault" version | grep -F "built ${vault_build_date}"
+"$OUT_DIR/helm" version --short \
+  | grep -Fx "v${HELM_VERSION}+${REBUILD_METADATA}+g${HELM_COMMIT:0:7}"
+"$OUT_DIR/kustomize" version \
+  | grep -Fx "v${KUSTOMIZE_VERSION}+${REBUILD_METADATA}"
+"$OUT_DIR/vault" version \
+  | grep -Fx \
+    "Vault v${VAULT_VERSION}+${REBUILD_METADATA} (${VAULT_COMMIT}), built ${vault_build_date}"
