@@ -13,6 +13,20 @@ require_value() {
   fi
 }
 
+assert_exact_output() {
+  local expected="$1"
+  shift
+  local actual
+
+  actual="$("$@" 2>&1)"
+  if [ "$actual" != "$expected" ]; then
+    printf 'Error: expected exact output:\n%s\nactual output:\n%s\n' \
+      "$expected" "$actual" >&2
+    exit 1
+  fi
+  printf '%s\n' "$actual"
+}
+
 clone_exact() {
   local repository="$1"
   local commit="$2"
@@ -142,10 +156,12 @@ test -n "$vault_build_date"
 )
 
 chmod 0755 "$OUT_DIR/helm" "$OUT_DIR/kustomize" "$OUT_DIR/vault"
-"$OUT_DIR/helm" version --short \
-  | grep -Fx "v${HELM_VERSION}+${REBUILD_METADATA}+g${HELM_COMMIT:0:7}"
-"$OUT_DIR/kustomize" version \
-  | grep -Fx "v${KUSTOMIZE_VERSION}+${REBUILD_METADATA}"
-"$OUT_DIR/vault" version \
-  | grep -Fx \
-    "Vault v${VAULT_VERSION}+${REBUILD_METADATA} (${VAULT_COMMIT}), built ${vault_build_date}"
+assert_exact_output \
+  "v${HELM_VERSION}+${REBUILD_METADATA}+g${HELM_COMMIT:0:7}" \
+  "$OUT_DIR/helm" version --short
+assert_exact_output \
+  "v${KUSTOMIZE_VERSION}+${REBUILD_METADATA}" \
+  "$OUT_DIR/kustomize" version
+assert_exact_output \
+  "Vault v${VAULT_VERSION}+${REBUILD_METADATA} (${VAULT_COMMIT}), built ${vault_build_date}" \
+  "$OUT_DIR/vault" version
