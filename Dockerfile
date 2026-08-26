@@ -42,7 +42,6 @@ COPY --from=patched-tools /out/vault /usr/local/bin/vault
 
 RUN set -euo pipefail; \
     chmod 0755 /usr/local/bin/ee-entrypoint; \
-    dnf -y update --allowerasing; \
     xargs -r dnf -y install --allowerasing < /tmp/rpm-packages.txt; \
     dnf -y install --allowerasing ca-certificates curl tar unzip; \
     dnf -y install --allowerasing gcc make python3-devel; \
@@ -70,7 +69,6 @@ RUN set -euo pipefail; \
     echo "Using COPR chroot: ${modulix_copr_chroot}"; \
     dnf -y copr enable "${MODULIX_COPR_OWNER}/${MODULIX_COPR_PROJECT}" "${modulix_copr_chroot}"; \
     xargs -r dnf -y install --allowerasing < /tmp/copr-packages.txt; \
-    dnf -y update --allowerasing; \
     ansible-navigator --version; \
     ansible-doc --version; \
     helm version --short; \
