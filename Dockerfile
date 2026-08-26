@@ -32,6 +32,7 @@ ARG MODULIX_COPR_CHROOT=auto
 ARG ONIGURUMA_HEADER_SHA256=7fb0a26767a8d2c31af3739ddd452b63860d520ef4b54fffbf55affd70550d8a
 
 COPY rpm-packages.txt /tmp/rpm-packages.txt
+COPY rpm-security-updates.lock /tmp/rpm-security-updates.lock
 COPY copr-packages.txt /tmp/copr-packages.txt
 COPY requirements.txt /tmp/requirements.txt
 COPY requirements.lock /tmp/requirements.lock
@@ -69,6 +70,25 @@ RUN set -euo pipefail; \
     echo "Using COPR chroot: ${modulix_copr_chroot}"; \
     dnf -y copr enable "${MODULIX_COPR_OWNER}/${MODULIX_COPR_PROJECT}" "${modulix_copr_chroot}"; \
     xargs -r dnf -y install --allowerasing < /tmp/copr-packages.txt; \
+    locked_security_pkgs=(); \
+    while read -r package evr extra; do \
+      [[ -z "${package}" || "${package}" == \#* ]] && continue; \
+      [[ "${package}" =~ ^[A-Za-z0-9+._-]+$ ]]; \
+      [[ "${evr}" =~ ^[0-9]+:[A-Za-z0-9+._~^-]+-[A-Za-z0-9+._~^-]+$ ]]; \
+      [[ -z "${extra:-}" ]]; \
+      if rpm -q "${package}" >/dev/null; then \
+        locked_security_pkgs+=("${package}-${evr}"); \
+      fi; \
+    done < /tmp/rpm-security-updates.lock; \
+    if (( ${#locked_security_pkgs[@]} )); then \
+      dnf -y install --allowerasing "${locked_security_pkgs[@]}"; \
+    fi; \
+    while read -r package evr extra; do \
+      [[ -z "${package}" || "${package}" == \#* ]] && continue; \
+      if rpm -q "${package}" >/dev/null; then \
+        test "$(rpm -q --qf '%{EPOCHNUM}:%{VERSION}-%{RELEASE}\n' "${package}")" = "${evr}"; \
+      fi; \
+    done < /tmp/rpm-security-updates.lock; \
     ansible-navigator --version; \
     ansible-doc --version; \
     helm version --short; \
@@ -79,7 +99,7 @@ RUN set -euo pipefail; \
     command -v ansible-nav-local; \
     dnf clean all; \
     rm -rf /var/cache/dnf /var/cache/yum; \
-    rm -f /tmp/rpm-packages.txt /tmp/copr-packages.txt /tmp/requirements.txt /tmp/requirements.lock
+    rm -f /tmp/rpm-packages.txt /tmp/rpm-security-updates.lock /tmp/copr-packages.txt /tmp/requirements.txt /tmp/requirements.lock
 
 RUN mkdir -p /runner /runner/.config /runner/.local/share/containers /tmp/ansible /tmp/ansible/tmp && \
     chmod 0777 /runner /runner/.config /runner/.local /runner/.local/share /runner/.local/share/containers && \
