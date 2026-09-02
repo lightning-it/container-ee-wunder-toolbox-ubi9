@@ -94,7 +94,7 @@ verify_module_override_scope() {
 }
 
 for name in \
-  GO_VERSION GO_X_CRYPTO_VERSION \
+  GO_VERSION GO_X_CRYPTO_VERSION GO_GRPC_VERSION \
   HELM_VERSION HELM_COMMIT HELM_ORAS_VERSION \
   KUSTOMIZE_VERSION KUSTOMIZE_COMMIT KUSTOMIZE_X_TEXT_VERSION \
   VAULT_VERSION VAULT_COMMIT; do
@@ -166,7 +166,9 @@ test -n "$vault_build_date"
 (
   cd "$SOURCE_DIR/vault"
   go get "golang.org/x/crypto@v${GO_X_CRYPTO_VERSION}"
+  go get "google.golang.org/grpc@v${GO_GRPC_VERSION}"
   test "$(go list -m -f '{{.Version}}' golang.org/x/crypto)" = "v${GO_X_CRYPTO_VERSION}"
+  test "$(go list -m -f '{{.Version}}' google.golang.org/grpc)" = "v${GO_GRPC_VERSION}"
   verify_module_override_scope \
     "$SOURCE_DIR/vault" "$VAULT_COMMIT" go.mod go.sum
   go build \
@@ -183,6 +185,8 @@ assert_module_version \
   "$OUT_DIR/helm" golang.org/x/crypto "v${GO_X_CRYPTO_VERSION}"
 assert_module_version \
   "$OUT_DIR/vault" golang.org/x/crypto "v${GO_X_CRYPTO_VERSION}"
+assert_module_version \
+  "$OUT_DIR/vault" google.golang.org/grpc "v${GO_GRPC_VERSION}"
 assert_exact_output \
   "v${HELM_VERSION}+${REBUILD_METADATA}+g${HELM_COMMIT:0:7}" \
   "$OUT_DIR/helm" version --short
