@@ -181,6 +181,18 @@
     },
     {
       "customType": "regex",
+      "description": "Vault Thrift security override in Dockerfile",
+      "managerFilePatterns": ["/Dockerfile/"],
+      "matchStrings": [
+        "ARG VAULT_THRIFT_VERSION=(?<currentValue>[0-9.]+)"
+      ],
+      "datasourceTemplate": "go",
+      "depNameTemplate": "github.com/apache/thrift",
+      "extractVersionTemplate": "^v(?<version>[0-9.]+)$",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
       "description": "modulix-automation-runtime COPR RPM pin",
       "managerFilePatterns": ["/copr-packages\\.txt$/"],
       "matchStrings": [
