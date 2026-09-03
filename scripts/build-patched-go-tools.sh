@@ -3,7 +3,7 @@ set -euo pipefail
 
 readonly OUT_DIR=/out
 readonly SOURCE_DIR=/src
-readonly REBUILD_METADATA=lit.2
+readonly REBUILD_METADATA=lit.3
 
 require_value() {
   local name="$1"
@@ -97,7 +97,7 @@ for name in \
   GO_VERSION GO_X_CRYPTO_VERSION GO_GRPC_VERSION \
   HELM_VERSION HELM_COMMIT HELM_ORAS_VERSION \
   KUSTOMIZE_VERSION KUSTOMIZE_COMMIT KUSTOMIZE_X_TEXT_VERSION \
-  VAULT_VERSION VAULT_COMMIT; do
+  VAULT_VERSION VAULT_COMMIT VAULT_THRIFT_VERSION; do
   require_value "$name"
 done
 
@@ -165,8 +165,10 @@ readonly vault_build_date
 test -n "$vault_build_date"
 (
   cd "$SOURCE_DIR/vault"
+  go get "github.com/apache/thrift@v${VAULT_THRIFT_VERSION}"
   go get "golang.org/x/crypto@v${GO_X_CRYPTO_VERSION}"
   go get "google.golang.org/grpc@v${GO_GRPC_VERSION}"
+  test "$(go list -m -f '{{.Version}}' github.com/apache/thrift)" = "v${VAULT_THRIFT_VERSION}"
   test "$(go list -m -f '{{.Version}}' golang.org/x/crypto)" = "v${GO_X_CRYPTO_VERSION}"
   test "$(go list -m -f '{{.Version}}' google.golang.org/grpc)" = "v${GO_GRPC_VERSION}"
   verify_module_override_scope \
@@ -187,6 +189,8 @@ assert_module_version \
   "$OUT_DIR/vault" golang.org/x/crypto "v${GO_X_CRYPTO_VERSION}"
 assert_module_version \
   "$OUT_DIR/vault" google.golang.org/grpc "v${GO_GRPC_VERSION}"
+assert_module_version \
+  "$OUT_DIR/vault" github.com/apache/thrift "v${VAULT_THRIFT_VERSION}"
 assert_exact_output \
   "v${HELM_VERSION}+${REBUILD_METADATA}+g${HELM_COMMIT:0:7}" \
   "$OUT_DIR/helm" version --short
