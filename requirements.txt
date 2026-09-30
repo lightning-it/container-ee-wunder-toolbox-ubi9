@@ -1,4 +1,4 @@
-ansible-core==2.18.19
+ansible-core==2.21.4
 ansible-navigator==26.6.0
 cryptography==50.0.2
 onigurumacffi==1.5.0
